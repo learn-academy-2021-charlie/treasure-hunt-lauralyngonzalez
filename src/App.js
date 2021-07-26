@@ -8,10 +8,12 @@ class App extends Component{
     this.state = {
       board: ["?", "?", "?", "?", "?", "?", "?", "?", "?"],
       treasureLocation: null,
-      bombLocation: null
+      bombLocation: null,
+      guesses: 5
     }
   }
 
+  //TODO: COMMENT on this lifecycle method
   componentDidMount() {
     let treasure = Math.floor(Math.random() * this.state.board.length)
     let bomb;
@@ -37,13 +39,14 @@ class App extends Component{
       board[index] = "🌴"
     }
     
-    this.setState({board: board})
+    this.setState({board: board, guesses: this.state.guesses-1})
   }
 
   render(){
     return(
       <>
         <h1>Treasure Hunt Game</h1>
+        <h4>Guesses left: {this.state.guesses}</h4>
         <div id="gameboard">
           {this.state.board.map((val, idx) => {
             return (
