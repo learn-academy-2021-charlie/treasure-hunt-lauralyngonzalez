@@ -15,8 +15,13 @@ class App extends Component{
     }
   }
 
-  //TODO: COMMENT on this lifecycle method
+  // React lifecycle method. Called when component is mounted
   componentDidMount() {
+    this.setUpBoard()
+  }
+
+  // Sets up the board. Called when component mounts or with play again button
+  setUpBoard = () => {
     let treasure = Math.floor(Math.random() * this.state.board.length)
     let bomb;
     
@@ -26,12 +31,16 @@ class App extends Component{
     } while (treasure === bomb);
     
     this.setState({
+      board: ["?", "?", "?", "?", "?", "?", "?", "?", "?"],
       treasureLocation: treasure,
       bombLocation: bomb,
-      gameStatus: "Guesses Left: " + this.state.guesses
+      guesses: 5,
+      gameStatus: "Guesses Left: 5",
+      gameDone: false
     })
   }
 
+  // Handles the game play and updates the board.
   handleGamePlay = (index) => {
     const {board} = this.state
     let currentStatus = this.state.gameStatus
@@ -44,6 +53,7 @@ class App extends Component{
     }
 
     // Display a palm tree, treasure, or bomb at the square
+    // Updates the game status
     if(index === this.state.treasureLocation) {
       board[index] = "💎"
       currentStatus = "Congratulations! You found the treasure!"
@@ -73,6 +83,15 @@ class App extends Component{
     })
   }
 
+  // Displays the play again button if game is done
+  isGameDone = () => {
+    if (this.state.gameDone) {
+      return (
+        <button type="button" onClick={this.setUpBoard}>Play Again</button>
+      )
+    }
+  }
+
   render(){
     return(
       <>
@@ -80,6 +99,8 @@ class App extends Component{
         
         <h4>{this.state.gameStatus}</h4>
         
+        {this.isGameDone()}
+
         <div id="gameboard">
           {this.state.board.map((val, idx) => {
             return (
