@@ -9,7 +9,8 @@ class App extends Component{
       board: ["?", "?", "?", "?", "?", "?", "?", "?", "?"],
       treasureLocation: null,
       bombLocation: null,
-      guesses: 5
+      guesses: 5,
+      gameStatus: null
     }
   }
 
@@ -23,30 +24,43 @@ class App extends Component{
       bomb = Math.floor(Math.random() * this.state.board.length)
     } while (treasure === bomb);
     
-    this.setState({treasureLocation: treasure,
-      bombLocation: bomb})
+    this.setState({
+      treasureLocation: treasure,
+      bombLocation: bomb,
+      gameStatus: "Guesses Left: " + this.state.guesses
+    })
   }
 
   handleGamePlay = (index) => {
-    const {board} = this.state
+    const {board, guesses} = this.state
+    let currentStatus = this.state.gameStatus
 
     // Display a palm tree, treasure, or bomb at the square
     if(index === this.state.treasureLocation) {
-      board[index] = "💎"  
+      board[index] = "💎"
+      currentStatus = "You Won!"
     } else if (index === this.state.bombLocation) {
       board[index] = "💣"
+      currentStatus = "You Lost!"
     } else {
       board[index] = "🌴"
+      currentStatus = "Guesses Left: " + (guesses-1).toString()
     }
     
-    this.setState({board: board, guesses: this.state.guesses-1})
+    this.setState({
+      board: board,
+      guesses: guesses-1,
+      gameStatus: currentStatus
+    })
   }
 
   render(){
     return(
       <>
         <h1>Treasure Hunt Game</h1>
-        <h4>Guesses left: {this.state.guesses}</h4>
+        
+        <h4>{this.state.gameStatus}</h4>
+        
         <div id="gameboard">
           {this.state.board.map((val, idx) => {
             return (
