@@ -10,7 +10,8 @@ class App extends Component{
       treasureLocation: null,
       bombLocation: null,
       guesses: 5,
-      gameStatus: null
+      gameStatus: null,
+      gameDone: false
     }
   }
 
@@ -34,14 +35,22 @@ class App extends Component{
   handleGamePlay = (index) => {
     const {board, guesses} = this.state
     let currentStatus = this.state.gameStatus
+    let endGame = false
+
+    // Return if the game is over
+    if (this.state.gameDone) {
+      return
+    }
 
     // Display a palm tree, treasure, or bomb at the square
     if(index === this.state.treasureLocation) {
       board[index] = "💎"
       currentStatus = "You Won!"
+      endGame = true
     } else if (index === this.state.bombLocation) {
       board[index] = "💣"
       currentStatus = "You Lost!"
+      endGame = true
     } else {
       board[index] = "🌴"
       currentStatus = "Guesses Left: " + (guesses-1).toString()
@@ -50,7 +59,8 @@ class App extends Component{
     this.setState({
       board: board,
       guesses: guesses-1,
-      gameStatus: currentStatus
+      gameStatus: currentStatus,
+      gameDone: endGame
     })
   }
 
