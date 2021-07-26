@@ -33,8 +33,9 @@ class App extends Component{
   }
 
   handleGamePlay = (index) => {
-    const {board, guesses} = this.state
+    const {board} = this.state
     let currentStatus = this.state.gameStatus
+    let currentGuesses = this.state.guesses
     let endGame = false
 
     // Return if the game is over
@@ -45,20 +46,28 @@ class App extends Component{
     // Display a palm tree, treasure, or bomb at the square
     if(index === this.state.treasureLocation) {
       board[index] = "💎"
-      currentStatus = "You Won!"
+      currentStatus = "Congratulations! You found the treasure!"
       endGame = true
     } else if (index === this.state.bombLocation) {
       board[index] = "💣"
-      currentStatus = "You Lost!"
+      currentStatus = "Game over. You landed on a bomb ☠️"
       endGame = true
     } else {
       board[index] = "🌴"
-      currentStatus = "Guesses Left: " + (guesses-1).toString()
+      currentGuesses--
+
+      // Check guesses and update status if no more guesses
+      if (currentGuesses > 0) {
+        currentStatus = "Guesses Left: " + currentGuesses
+      } else {
+        currentStatus = "You lost! No more guesses!"
+        endGame = true
+      }
     }
     
     this.setState({
       board: board,
-      guesses: guesses-1,
+      guesses: currentGuesses,
       gameStatus: currentStatus,
       gameDone: endGame
     })
