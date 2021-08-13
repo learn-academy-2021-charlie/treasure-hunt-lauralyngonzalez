@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
 import './App.css'
 import Square from './components/Square'
+import spongebob from './img/spongebob.png'
+import krabby_patty from './img/krabby_patty_sq.jpeg'
+import mr_krabs from './img/mr_krabs.png'
 
 class App extends Component{
+
   constructor(props){
     super(props)
     this.state = {
@@ -11,7 +15,11 @@ class App extends Component{
       bombLocation: null,
       guesses: 5,
       gameStatus: null,
-      gameDone: false
+      gameDone: false,
+      quotes: ["...onions, tomatoes, ketchup, mustard, and pickles between them (in that order).",          
+                "The sandwich comprises two buns, with the patty, lettuce, cheese...",
+                "Without it, there will be a complete breakdown of social order!",
+                "The Krabby Patty is what ties us all together!"]
     }
   }
 
@@ -29,7 +37,7 @@ class App extends Component{
     do {
       bomb = Math.floor(Math.random() * this.state.board.length)
     } while (treasure === bomb);
-    
+
     this.setState({
       board: ["?", "?", "?", "?", "?", "?", "?", "?", "?"],
       treasureLocation: treasure,
@@ -55,15 +63,15 @@ class App extends Component{
     // Display a palm tree, treasure, or bomb at the square
     // Updates the game status
     if(index === this.state.treasureLocation) {
-      board[index] = "💎"
-      currentStatus = "Congratulations! You found the treasure!"
+      board[index] = krabby_patty
+      currentStatus = "Congratulations! Did you find the secret formula?"
       endGame = true
     } else if (index === this.state.bombLocation) {
-      board[index] = "💣"
-      currentStatus = "Game over. You landed on a bomb ☠️"
+      board[index] = mr_krabs
+      currentStatus = "Game over. Get back to work!"
       endGame = true
     } else {
-      board[index] = "🌴"
+      board[index] = spongebob
       currentGuesses--
 
       // Check guesses and update status if no more guesses
@@ -95,9 +103,11 @@ class App extends Component{
   render(){
     return(
       <>
-        <h1>Treasure Hunt Game</h1>
+        <h1>Krabby Patty Hunt</h1>
+        <h4>Find the krabby patty before Mr. Krabs sends you back to work.</h4>
         
         <h4>{this.state.gameStatus}</h4>
+        <h4>{!this.state.gameDone && this.state.guesses < 5 && this.state.quotes[this.state.guesses-1]}</h4>
         
         {this.isGameDone()}
 
@@ -106,6 +116,7 @@ class App extends Component{
             return (
               <Square
                 key={idx}
+                img_url={val}
                 value={val}
                 index={idx}
                 handleGamePlay={this.handleGamePlay}

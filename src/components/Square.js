@@ -9,9 +9,8 @@ class Square extends Component{
   render(){
     return(
       <>
-        <div id="square" 
-        onClick={this.handleClick}>
-          {this.props.value}
+        <div id="square" onClick={this.handleClick}>
+          {this.props.value === "?" ? '?' : <img src={this.props.img_url} alt="?" />}
         </div>
       </>
     )
